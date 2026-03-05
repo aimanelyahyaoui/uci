@@ -2,6 +2,12 @@ import time
 import json
 import random
 from datetime import datetime, timezone
+from kafka import KafkaProducer
+
+producer = KafkaProducer(
+    bootstrap_servers=['localhost:9092'],
+    value_serializer=lambda x: json.dumps(x).encode('utf-8')
+)
 
 ritmo_cardiaco = 75
 while True:
@@ -12,8 +18,7 @@ while True:
         "ritmo_cardiaco": ritmo_cardiaco,
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
-    mensaje_json = json.dumps(datos_paciente)
-
-    print(mensaje_json)
+    producer.send('sensores_uci', value=datos_paciente)
+    print(f"Enviado a Kafka: {datos_paciente}")
 
     time.sleep(2)
