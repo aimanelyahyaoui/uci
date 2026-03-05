@@ -26,3 +26,15 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpassword
       POSTGRES_DB: hospital_uci
+
+  # --- EL PANEL VISUAL ---
+  grafana:
+    image: grafana/grafana-oss
+    container_name: uci_grafana
+    ports:
+      - "3000:3000" # Entraremos por el puerto 3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_DASHBOARDS_MIN_REFRESH_INTERVAL=1s
+    depends_on:
+      - postgres
